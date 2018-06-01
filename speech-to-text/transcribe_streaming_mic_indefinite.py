@@ -28,23 +28,49 @@ Example usage:
 # [START import_libraries]
 from __future__ import division
 
+import argparse
 import re
 import sys
+import grpc
 
 from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
-import pyaudio
-from six.moves import queue
 
-from microphone_stream import MicrophoneStream
+from microphone_stream import ResumableMicrophoneStream, SimulatedMicrophoneStream
 # [END import_libraries]
 
-# Audio recording parameters
-RATE = 16000
-CHUNK = int(RATE / 10)  # 100ms
+def duration_to_secs(duration):
+    return duration.seconds + (duration.nanos / float(1e9))
 
-def listen_print_loop(responses):
+def _record_keeper(responses, stream):
+    """Calls the stream's on_transcribe callback for each final response.
+
+    Args:
+        responses - a generator of responses. The responses must already be
+            filtered for ones with results and alternatives.
+        stream - a ResumableMicrophoneStream.
+    """
+    for r in responses:
+        result = r.results[0]
+        if result.is_final:
+            top_alternative = result.alternatives[0]
+            # Keep track of what transcripts we've received, so we can resume
+            # intelligently when we hit the deadline
+            stream.on_transcribe(duration_to_secs(
+                    top_alternative.words[-1].end_time))
+        yield r
+
+def listen_print_loop(responses, stream):
+    """Iterates through server responses and prints them.
+
+    Same as in transcribe_streaming_mic, but keeps track of when a sent
+    audio_chunk has been transcribed.
+    """
+    with_results = (r for r in responses if (r.results and r.results[0].alternatives))
+    _listen_print_loop(_record_keeper(with_results, stream))
+
+def _listen_print_loop(responses):
     """Iterates through server responses and prints them.
 
     The responses passed is a generator that will block until a response
@@ -72,7 +98,8 @@ def listen_print_loop(responses):
             continue
 
         # Display the transcription of the top alternative.
-        transcript = result.alternatives[0].transcript
+        top_alternative = result.alternatives[0]
+        transcript = top_alternative.transcript
 
         # Display interim results, but with a carriage return at the end of the
         # line, so subsequent lines will overwrite them.
@@ -98,8 +125,7 @@ def listen_print_loop(responses):
 
             num_chars_printed = 0
 
-
-def main():
+def main(sample_rate, audio_src):
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = 'en-US'  # a BCP-47 language tag
@@ -107,23 +133,55 @@ def main():
     client = speech.SpeechClient()
     config = types.RecognitionConfig(
         encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
-        sample_rate_hertz=RATE,
-        language_code=language_code
-    )
+        sample_rate_hertz=sample_rate,
+        language_code=language_code,
+        max_alternatives=1,
+        enable_word_time_offsets=True)
     streaming_config = types.StreamingRecognitionConfig(
         config=config,
-        interim_results=True
-    )
+        interim_results=True)
 
-    with MicrophoneStream(RATE, CHUNK) as stream:
-        audio_generator = stream.generator()
-        requests = (types.StreamingRecognizeRequest(audio_content=content) for content in audio_generator)
+    if audio_src:
+        mic_manager = SimulatedMicrophoneStream(
+                audio_src, sample_rate, int(sample_rate / 10))
+    else:
+        mic_manager = ResumableMicrophoneStream(
+                sample_rate, int(sample_rate / 10))
 
-        responses = client.streaming_recognize(streaming_config, requests)
+    with mic_manager as stream:
+        resume = False
+        while True:
+            audio_generator = stream.generator(resume=resume)
+            requests = (types.StreamingRecognizeRequest(audio_content=content)
+                        for content in audio_generator)
 
-        # Now, put the transcription responses to use.
-        listen_print_loop(responses)
+            responses = client.streaming_recognize(streaming_config, requests)
+
+            try:
+                # Now, put the transcription responses to use.
+                listen_print_loop(responses, stream)
+                break
+            except grpc.RpcError as e:
+                if e.code() not in (grpc.StatusCode.INVALID_ARGUMENT,
+                                    grpc.StatusCode.OUT_OF_RANGE):
+                    raise
+                details = e.details()
+                if e.code() == grpc.StatusCode.INVALID_ARGUMENT:
+                    if 'deadline too short' not in details:
+                        raise
+                else:
+                    if 'maximum allowed stream duration' not in details:
+                        raise
+
+                print('Resuming..')
+                resume = True
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--rate', default=16000, help='Sample rate.', type=int)
+    parser.add_argument('--audio_src', help='File to simulate streaming of.')
+    args = parser.parse_args()
+    main(args.rate, args.audio_src)
