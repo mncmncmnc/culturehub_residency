@@ -1,44 +1,26 @@
 #!/usr/bin/env python
 
-# Copyright 2017 Google Inc. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""Google Cloud Speech API sample application using the streaming API.
-
-NOTE: This module requires the additional dependency `pyaudio`. To install
-using pip:
-
-    pip install pyaudio
-
-Example usage:
-    python transcribe_streaming_mic.py
-"""
-
-# [START import_libraries]
 from __future__ import division
 
 import argparse
 import re
 import sys
 import grpc
+import time
 
 from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
+from osc4py3.as_eventloop import (
+    osc_startup,
+    osc_udp_client,
+    osc_send,
+    osc_process,
+    osc_terminate
+)
+from osc4py3 import oscbuildparse
 
 from microphone_stream import ResumableMicrophoneStream, SimulatedMicrophoneStream
-# [END import_libraries]
 
 def duration_to_secs(duration):
     return duration.seconds + (duration.nanos / float(1e9))
@@ -114,6 +96,7 @@ def _listen_print_loop(responses):
 
             num_chars_printed = len(transcript)
 
+            osc_address_pattern = '/transcript/interim'
         else:
             print(transcript + overwrite_chars)
 
@@ -124,6 +107,12 @@ def _listen_print_loop(responses):
                 break
 
             num_chars_printed = 0
+
+            osc_address_pattern = '/transcript/final'
+
+        msg = oscbuildparse.OSCMessage(osc_address_pattern, ",s", [transcript.strip('\"').strip()])
+        osc_send(msg, 'python-speech-to-text')
+        osc_process()
 
 def main(sample_rate, audio_src):
     # See http://g.co/cloud/speech/docs/languages
@@ -148,6 +137,9 @@ def main(sample_rate, audio_src):
         mic_manager = ResumableMicrophoneStream(
                 sample_rate, int(sample_rate / 10))
 
+    osc_startup()
+    osc_udp_client('localhost', 2781, 'python-speech-to-text')
+
     with mic_manager as stream:
         resume = False
         while True:
@@ -160,6 +152,8 @@ def main(sample_rate, audio_src):
             try:
                 # Now, put the transcription responses to use.
                 listen_print_loop(responses, stream)
+                # Teardown code should be executed here
+                osc_terminate()
                 break
             except grpc.RpcError as e:
                 if e.code() not in (grpc.StatusCode.INVALID_ARGUMENT,
@@ -173,7 +167,7 @@ def main(sample_rate, audio_src):
                     if 'maximum allowed stream duration' not in details:
                         raise
 
-                print('Resuming..')
+                # print('Resuming..')
                 resume = True
 
 
