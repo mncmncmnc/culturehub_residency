@@ -6,6 +6,7 @@ import six
 
 from six.moves import queue
 
+
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
     def __init__(self, rate, chunk_size):
@@ -90,9 +91,9 @@ class ResumableMicrophoneStream(MicrophoneStream):
 
         self._bytes_per_chunk = (self._chunk_size * self._bytes_per_sample)
         self._chunks_per_second = (
-                self._bytes_per_second / self._bytes_per_chunk)
+            self._bytes_per_second / self._bytes_per_chunk)
         self._untranscribed = collections.deque(
-                maxlen=int(self._max_replay_secs * self._chunks_per_second))
+            maxlen=int(self._max_replay_secs * self._chunks_per_second))
 
     def on_transcribe(self, end_time):
         while self._untranscribed and end_time > self._untranscribed[0][1]:
@@ -129,8 +130,7 @@ class SimulatedMicrophoneStream(ResumableMicrophoneStream):
 
         while chunk and not self.closed:
             total_bytes_read += len(chunk)
-            expected_yield_time = start_time + (
-                    total_bytes_read / self._bytes_per_second)
+            expected_yield_time = start_time + (total_bytes_read / self._bytes_per_second)
             now = time.time()
             if expected_yield_time > now:
                 time.sleep(expected_yield_time - now)
@@ -147,7 +147,7 @@ class SimulatedMicrophoneStream(ResumableMicrophoneStream):
 
         # Continue sending silence - 10s worth
         trailing_silence = six.StringIO(
-                b'\0' * self._bytes_per_second * 10)
+            b'\0' * self._bytes_per_second * 10)
         for chunk in self._delayed(trailing_silence.read):
             yield chunk
 

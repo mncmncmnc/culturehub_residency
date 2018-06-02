@@ -5,12 +5,11 @@ from __future__ import division
 import argparse
 import re
 import sys
-import grpc
-import time
 
 from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
+from google.api_core import exceptions
 from osc4py3.as_eventloop import (
     osc_startup,
     osc_udp_client,
@@ -22,8 +21,10 @@ from osc4py3 import oscbuildparse
 
 from microphone_stream import ResumableMicrophoneStream, SimulatedMicrophoneStream
 
+
 def duration_to_secs(duration):
     return duration.seconds + (duration.nanos / float(1e9))
+
 
 def _record_keeper(responses, stream):
     """Calls the stream's on_transcribe callback for each final response.
@@ -39,9 +40,9 @@ def _record_keeper(responses, stream):
             top_alternative = result.alternatives[0]
             # Keep track of what transcripts we've received, so we can resume
             # intelligently when we hit the deadline
-            stream.on_transcribe(duration_to_secs(
-                    top_alternative.words[-1].end_time))
+            stream.on_transcribe(duration_to_secs(top_alternative.words[-1].end_time))
         yield r
+
 
 def listen_print_loop(responses, stream):
     """Iterates through server responses and prints them.
@@ -51,6 +52,7 @@ def listen_print_loop(responses, stream):
     """
     with_results = (r for r in responses if (r.results and r.results[0].alternatives))
     _listen_print_loop(_record_keeper(with_results, stream))
+
 
 def _listen_print_loop(responses):
     """Iterates through server responses and prints them.
@@ -114,6 +116,7 @@ def _listen_print_loop(responses):
         osc_send(msg, 'python-speech-to-text')
         osc_process()
 
+
 def main(sample_rate, audio_src):
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
@@ -131,11 +134,9 @@ def main(sample_rate, audio_src):
         interim_results=True)
 
     if audio_src:
-        mic_manager = SimulatedMicrophoneStream(
-                audio_src, sample_rate, int(sample_rate / 10))
+        mic_manager = SimulatedMicrophoneStream(audio_src, sample_rate, int(sample_rate / 10))
     else:
-        mic_manager = ResumableMicrophoneStream(
-                sample_rate, int(sample_rate / 10))
+        mic_manager = ResumableMicrophoneStream(sample_rate, int(sample_rate / 10))
 
     osc_startup()
     osc_udp_client('localhost', 2781, 'python-speech-to-text')
@@ -155,17 +156,10 @@ def main(sample_rate, audio_src):
                 # Teardown code should be executed here
                 osc_terminate()
                 break
-            except grpc.RpcError as e:
-                if e.code() not in (grpc.StatusCode.INVALID_ARGUMENT,
-                                    grpc.StatusCode.OUT_OF_RANGE):
+            except (exceptions.OutOfRange, exceptions.InvalidArgument) as e:
+                if not ('maximum allowed stream duration' in e.message or
+                        'deadline too short' in e.message):
                     raise
-                details = e.details()
-                if e.code() == grpc.StatusCode.INVALID_ARGUMENT:
-                    if 'deadline too short' not in details:
-                        raise
-                else:
-                    if 'maximum allowed stream duration' not in details:
-                        raise
 
                 # print('Resuming..')
                 resume = True
