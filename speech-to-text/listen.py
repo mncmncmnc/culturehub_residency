@@ -19,7 +19,7 @@ from osc4py3.as_eventloop import (
 )
 from osc4py3 import oscbuildparse
 
-from microphone_stream import ResumableMicrophoneStream, SimulatedMicrophoneStream
+from microphone_stream import ResumableMicrophoneStream
 
 
 def duration_to_secs(duration):
@@ -117,7 +117,7 @@ def _listen_print_loop(responses):
         osc_process()
 
 
-def main(sample_rate, audio_src):
+def main(sample_rate, device_index):
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = 'en-US'  # a BCP-47 language tag
@@ -133,10 +133,7 @@ def main(sample_rate, audio_src):
         config=config,
         interim_results=True)
 
-    if audio_src:
-        mic_manager = SimulatedMicrophoneStream(audio_src, sample_rate, int(sample_rate / 10))
-    else:
-        mic_manager = ResumableMicrophoneStream(sample_rate, int(sample_rate / 10))
+    mic_manager = ResumableMicrophoneStream(sample_rate, int(sample_rate / 10), device_index)
 
     osc_startup()
     osc_udp_client('localhost', 2781, 'python-speech-to-text')
@@ -169,7 +166,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('--rate', default=16000, help='Sample rate.', type=int)
-    parser.add_argument('--audio_src', help='File to simulate streaming of.')
+    parser.add_argument('-r', '--rate', default=16000, help='Sample rate.', type=int)
+    parser.add_argument('-d', '--device_index', default=0, help='Device index of microphone.', type=int)
     args = parser.parse_args()
-    main(args.rate, args.audio_src)
+    main(args.rate, args.device_index)

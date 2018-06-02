@@ -1,17 +1,15 @@
 import collections
-import threading
-import time
 import pyaudio
-import six
 
 from six.moves import queue
 
 
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
-    def __init__(self, rate, chunk_size):
+    def __init__(self, rate, chunk_size, device_index):
         self._rate = rate
         self._chunk_size = chunk_size
+        self._device_index = device_index
 
         # Create a thread-safe buffer of audio data
         self._buff = queue.Queue()
@@ -31,7 +29,7 @@ class MicrophoneStream(object):
             channels=self._num_channels,
             rate=self._rate,
             input=True,
-            input_device_index=2,
+            input_device_index=self._device_index,
             frames_per_buffer=self._chunk_size,
             # Run the audio stream asynchronously to fill the buffer object.
             # This is necessary so that the input device's buffer doesn't
@@ -80,8 +78,8 @@ class MicrophoneStream(object):
 
 class ResumableMicrophoneStream(MicrophoneStream):
     """Opens a recording stream as a generator yielding the audio chunks."""
-    def __init__(self, rate, chunk_size, max_replay_secs=5):
-        super(ResumableMicrophoneStream, self).__init__(rate, chunk_size)
+    def __init__(self, rate, chunk_size, device_index, max_replay_secs=5):
+        super(ResumableMicrophoneStream, self).__init__(rate, chunk_size, device_index)
         self._max_replay_secs = max_replay_secs
 
         # Some useful numbers
@@ -115,53 +113,3 @@ class ResumableMicrophoneStream(MicrophoneStream):
             self._untranscribed.append((byte_data, chunk_end_time))
 
             yield byte_data
-
-
-class SimulatedMicrophoneStream(ResumableMicrophoneStream):
-    def __init__(self, audio_src, *args, **kwargs):
-        super(SimulatedMicrophoneStream, self).__init__(*args, **kwargs)
-        self._audio_src = audio_src
-
-    def _delayed(self, get_data):
-        total_bytes_read = 0
-        start_time = time.time()
-
-        chunk = get_data(self._bytes_per_chunk)
-
-        while chunk and not self.closed:
-            total_bytes_read += len(chunk)
-            expected_yield_time = start_time + (total_bytes_read / self._bytes_per_second)
-            now = time.time()
-            if expected_yield_time > now:
-                time.sleep(expected_yield_time - now)
-
-            yield chunk
-
-            chunk = get_data(self._bytes_per_chunk)
-
-    def _stream_from_file(self, audio_src):
-        with open(audio_src, 'rb') as f:
-            for chunk in self._delayed(
-                    lambda b_per_chunk: f.read(b_per_chunk)):
-                yield chunk
-
-        # Continue sending silence - 10s worth
-        trailing_silence = six.StringIO(
-            b'\0' * self._bytes_per_second * 10)
-        for chunk in self._delayed(trailing_silence.read):
-            yield chunk
-
-    def _thread(self):
-        for chunk in self._stream_from_file(self._audio_src):
-            self._fill_buffer(chunk)
-        self._fill_buffer(None)
-
-    def __enter__(self):
-        self.closed = False
-
-        threading.Thread(target=self._thread).start()
-
-        return self
-
-    def __exit__(self, type, value, traceback):
-        self.closed = True
