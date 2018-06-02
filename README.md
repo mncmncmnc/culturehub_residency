@@ -41,6 +41,16 @@ cd speech-to-text
 pip install -r requirements.txt
 ```
 
+7. Create a [new Google project](https://console.developers.google.com/projectcreate) and a [service account](https://console.developers.google.com/projectselector/iam-admin/serviceaccounts) with Owner permissions for that project, if you do not already have those. Download the service account credentials as a JSON file and place the file in a directory that makes sense to you, e.g. your home directory.
+
+8. Add a `GOOGLE_APPLICATION_CREDENTIALS` environment variable to your ~/.bash_profile that points to the location of the JSON file containing your Google service account credentials.
+
+```
+echo 'export GOOGLE_APPLICATION_CREDENTIALS=/path/to/my-credentials-805re3qcnbcd.json' >> ~/.bash_profile
+
+source ~/.bash_profile
+```
+
 You should now be able to run the speech transcription Python script. You can test it out by running the following command from the `speech-to-text` directory.
 
 ```python listen.py 0```
