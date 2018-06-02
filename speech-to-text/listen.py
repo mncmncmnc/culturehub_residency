@@ -138,6 +138,10 @@ def main(sample_rate, device_index):
     osc_startup()
     osc_udp_client('localhost', 2781, 'python-speech-to-text')
 
+    msg = oscbuildparse.OSCMessage('/start', None, oscbuildparse.OSCbang())
+    osc_send(msg, 'python-speech-to-text')
+    osc_process()
+
     with mic_manager as stream:
         resume = False
         while True:
@@ -151,6 +155,9 @@ def main(sample_rate, device_index):
                 # Now, put the transcription responses to use.
                 listen_print_loop(responses, stream)
                 # Teardown code should be executed here
+                msg = oscbuildparse.OSCMessage('/stop', None, oscbuildparse.OSCbang())
+                osc_send(msg, 'python-speech-to-text')
+                osc_process()
                 osc_terminate()
                 break
             except (exceptions.OutOfRange, exceptions.InvalidArgument) as e:
