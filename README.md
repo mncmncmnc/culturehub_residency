@@ -1,5 +1,7 @@
 # Terminal Setup Instructions for OS X
 
+Run the following commands from the root directory of this repo.
+
 1. Install Homebrew.
 
 ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```
