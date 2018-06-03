@@ -38,6 +38,58 @@
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-44",
+					"linecount" : 2,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 358.0, 540.5, 158.0, 33.0 ],
+					"style" : "",
+					"text" : "use pkill to stop the process running the Python script"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-42",
+					"linecount" : 4,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 129.0, 583.0, 150.0, 60.0 ],
+					"style" : "",
+					"text" : "use the \"shell\" external to run an Applescript script that in turn runs the Python script"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-35",
+					"linecount" : 2,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 181.0, 378.5, 154.0, 33.0 ],
+					"presentation_rect" : [ 180.0, 406.0, 0.0, 0.0 ],
+					"style" : "",
+					"text" : "remove \"Macintosh HD:\" from the path"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-31",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 127.0, 358.0, 154.0, 20.0 ],
+					"style" : "",
+					"text" : "output the current directory"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-28",
 					"maxclass" : "newobj",
 					"numinlets" : 3,
@@ -56,7 +108,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 142.0, 321.5, 150.0, 33.0 ],
+					"patching_rect" : [ 107.0, 316.0, 150.0, 33.0 ],
 					"style" : "",
 					"text" : "the Python script will start when the patch loads"
 				}
@@ -232,7 +284,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 37.0, 639.0, 70.0, 22.0 ],
+					"patching_rect" : [ 37.0, 614.0, 70.0, 22.0 ],
 					"style" : "",
 					"text" : "print stdout"
 				}
@@ -1131,6 +1183,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-33", 0 ],
+					"midpoints" : [ 57.5, 496.5, 109.0, 496.5 ],
 					"source" : [ "obj-39", 1 ]
 				}
 
