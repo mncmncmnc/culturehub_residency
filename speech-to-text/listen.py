@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+Adapted from: https://github.com/GoogleCloudPlatform/python-docs-samples/blob/b0bd8e9ce6b1535c81715b35fed05cef2aa37cba/speech/cloud-client/transcribe_streaming_indefinite.py
+"""
 
 from __future__ import division
 
@@ -51,10 +54,10 @@ def listen_print_loop(responses, stream):
     audio_chunk has been transcribed.
     """
     with_results = (r for r in responses if (r.results and r.results[0].alternatives))
-    _listen_print_loop(_record_keeper(with_results, stream))
+    listen_print_loop_helper(_record_keeper(with_results, stream))
 
 
-def _listen_print_loop(responses):
+def listen_print_loop_helper(responses):
     """Iterates through server responses and prints them.
 
     The responses passed is a generator that will block until a response
@@ -117,7 +120,7 @@ def _listen_print_loop(responses):
         osc_process()
 
 
-def main(sample_rate, device_index):
+def main(sample_rate, device_name):
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = 'en-US'  # a BCP-47 language tag
@@ -133,7 +136,7 @@ def main(sample_rate, device_index):
         config=config,
         interim_results=True)
 
-    mic_manager = ResumableMicrophoneStream(sample_rate, int(sample_rate / 10), device_index)
+    mic_manager = ResumableMicrophoneStream(sample_rate, int(sample_rate / 10), device_name)
 
     osc_startup()
     osc_udp_client('localhost', 2781, 'python-speech-to-text')
@@ -174,6 +177,6 @@ if __name__ == '__main__':
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('-r', '--rate', default=16000, help='Sample rate.', type=int)
-    parser.add_argument('-d', '--device_index', default=0, help='Device index of microphone.', type=int)
+    parser.add_argument('-d', '--device_name', default='Built-in Microphone', help='Name of microphone device.', type=str)
     args = parser.parse_args()
-    main(args.rate, args.device_index)
+    main(args.rate, args.device_name)

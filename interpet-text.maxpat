@@ -38,6 +38,19 @@
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-43",
+					"maxclass" : "newobj",
+					"numinlets" : 0,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 471.0, 253.599548, 67.0, 22.0 ],
+					"style" : "",
+					"text" : "r audio-init"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-44",
 					"linecount" : 2,
 					"maxclass" : "comment",
@@ -119,10 +132,10 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 2,
-					"outlettype" : [ "int", "bang" ],
+					"outlettype" : [ "", "bang" ],
 					"patching_rect" : [ 142.0, 478.0, 30.0, 22.0 ],
 					"style" : "",
-					"text" : "t i b"
+					"text" : "t l b"
 				}
 
 			}
@@ -440,7 +453,7 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-41",
-					"items" : [ "Built-in Microphone", ",", "Soundflower (2ch)", ",", "Soundflower (64ch)", ",", "Loopback Audio 2", ",", "Loopback Audio", ",", "Aggregate Device", ",", "oren" ],
+					"items" : [ "Built-in Microphone", ",", "Scarlett 6i6 USB", ",", "Soundflower (2ch)", ",", "Soundflower (64ch)", ",", "Loopback Audio 2", ",", "Loopback Audio", ",", "Aggregate Device (1)", ",", "oren", ",", "Aggregate Device (2)" ],
 					"maxclass" : "umenu",
 					"numinlets" : 1,
 					"numoutlets" : 3,
@@ -544,7 +557,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 102.0, 25.0, 24.0, 24.0 ],
+					"patching_rect" : [ 60.0, 27.0, 24.0, 24.0 ],
 					"style" : ""
 				}
 
@@ -556,7 +569,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 122.0, 46.0, 61.0, 22.0 ],
+					"patching_rect" : [ 60.0, 54.0, 61.0, 22.0 ],
 					"style" : "",
 					"text" : "visible $1"
 				}
@@ -594,7 +607,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 50.0, 88.0, 46.0, 22.0 ],
+					"patching_rect" : [ 111.5, 118.0, 46.0, 22.0 ],
 					"style" : "",
 					"text" : "s draw"
 				}
@@ -607,7 +620,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 3,
 					"outlettype" : [ "", "bang", "" ],
-					"patching_rect" : [ 21.0, 60.0, 200.0, 22.0 ],
+					"patching_rect" : [ 21.0, 81.0, 200.0, 22.0 ],
 					"style" : "",
 					"text" : "jit.world mnc @visible 0 @floating 1"
 				}
@@ -795,7 +808,7 @@
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 311.0, 191.0, 196.0, 22.0 ],
 					"style" : "",
-					"text" : "hello"
+					"text" : "\"should be working\""
 				}
 
 			}
@@ -821,7 +834,7 @@
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 7.5, 191.0, 290.0, 22.0 ],
 					"style" : "",
-					"text" : "exit"
+					"text" : "\"should be working\""
 				}
 
 			}
@@ -1036,7 +1049,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-38", 0 ],
+					"destination" : [ "obj-41", 0 ],
 					"source" : [ "obj-22", 0 ]
 				}
 
@@ -1160,13 +1173,6 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-25", 0 ],
-					"source" : [ "obj-38", 1 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
 					"destination" : [ "obj-41", 0 ],
 					"source" : [ "obj-38", 0 ]
 				}
@@ -1189,9 +1195,23 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-25", 0 ],
+					"source" : [ "obj-41", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-38", 0 ],
 					"midpoints" : [ 363.0, 319.0, 344.0, 319.0, 344.0, 242.599548, 363.0, 242.599548 ],
 					"source" : [ "obj-41", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-41", 0 ],
+					"source" : [ "obj-43", 0 ]
 				}
 
 			}

@@ -6,10 +6,10 @@ from six.moves import queue
 
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
-    def __init__(self, rate, chunk_size, device_index):
+    def __init__(self, rate, chunk_size, device_name):
         self._rate = rate
         self._chunk_size = chunk_size
-        self._device_index = device_index
+        self._device_name = device_name
 
         # Create a thread-safe buffer of audio data
         self._buff = queue.Queue()
@@ -22,6 +22,17 @@ class MicrophoneStream(object):
         self.closed = False
 
         self._audio_interface = pyaudio.PyAudio()
+
+        input_device_index = 0
+        for i in range(self._audio_interface.get_device_count()):
+            device = self._audio_interface.get_device_info_by_index(i)
+            device_name = device['name']
+            if device_name == self._device_name or device_name in self._device_name:
+                input_device_index = i
+                break
+
+        self._device_index = input_device_index
+
         self._audio_stream = self._audio_interface.open(
             format=pyaudio.paInt16,
             # The API currently only supports 1-channel (mono) audio
@@ -29,7 +40,7 @@ class MicrophoneStream(object):
             channels=self._num_channels,
             rate=self._rate,
             input=True,
-            input_device_index=self._device_index,
+            input_device_index=input_device_index,
             frames_per_buffer=self._chunk_size,
             # Run the audio stream asynchronously to fill the buffer object.
             # This is necessary so that the input device's buffer doesn't
@@ -78,8 +89,8 @@ class MicrophoneStream(object):
 
 class ResumableMicrophoneStream(MicrophoneStream):
     """Opens a recording stream as a generator yielding the audio chunks."""
-    def __init__(self, rate, chunk_size, device_index, max_replay_secs=5):
-        super(ResumableMicrophoneStream, self).__init__(rate, chunk_size, device_index)
+    def __init__(self, rate, chunk_size, device_name, max_replay_secs=5):
+        super(ResumableMicrophoneStream, self).__init__(rate, chunk_size, device_name)
         self._max_replay_secs = max_replay_secs
 
         # Some useful numbers
