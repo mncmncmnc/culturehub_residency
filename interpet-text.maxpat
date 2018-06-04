@@ -43,7 +43,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 358.0, 540.5, 158.0, 33.0 ],
+					"patching_rect" : [ 358.0, 540.5, 160.0, 33.0 ],
 					"style" : "",
 					"text" : "use pkill to stop the process running the Python script"
 				}
@@ -70,7 +70,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 181.0, 378.5, 154.0, 33.0 ],
-					"presentation_rect" : [ 180.0, 406.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "remove \"Macintosh HD:\" from the path"
 				}
@@ -447,7 +446,7 @@
 					"numoutlets" : 3,
 					"outlettype" : [ "int", "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 345.5, 384.0, 100.0, 22.0 ],
+					"patching_rect" : [ 353.5, 287.0, 143.5, 22.0 ],
 					"style" : ""
 				}
 
@@ -461,7 +460,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "int" ],
-					"patching_rect" : [ 345.5, 350.599548, 110.0, 23.0 ],
+					"patching_rect" : [ 353.5, 253.599548, 110.0, 23.0 ],
 					"style" : "",
 					"text" : "adstatus option 0"
 				}
@@ -531,7 +530,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 1049.0, 577.0, 43.0, 22.0 ],
+					"patching_rect" : [ 836.0, 621.0, 43.0, 22.0 ],
 					"style" : "",
 					"text" : "zl sort"
 				}
@@ -1191,7 +1190,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-38", 0 ],
-					"midpoints" : [ 355.0, 416.0, 336.0, 416.0, 336.0, 339.599548, 355.0, 339.599548 ],
+					"midpoints" : [ 363.0, 319.0, 344.0, 319.0, 344.0, 242.599548, 363.0, 242.599548 ],
 					"source" : [ "obj-41", 0 ]
 				}
 
