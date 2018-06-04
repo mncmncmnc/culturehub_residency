@@ -10,7 +10,7 @@ def main():
 
     for i in range(audio.get_device_count()):
         device = audio.get_device_info_by_index(i)
-        pp.pprint({k: device[k] for k in ['name', 'index']})
+        pp.pprint({k: device[k] for k in ['name', 'index', 'maxInputChannels', 'maxOutputChannels']})
 
 
 if __name__ == '__main__':

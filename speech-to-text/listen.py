@@ -136,7 +136,7 @@ def main(sample_rate, device_name):
         config=config,
         interim_results=True)
 
-    mic_manager = ResumableMicrophoneStream(sample_rate, int(sample_rate / 10), device_name)
+    mic_manager = ResumableMicrophoneStream(sample_rate, int(sample_rate / 10), device_name, max_replay_secs=5)
 
     osc_startup()
     osc_udp_client('localhost', 2781, 'python-speech-to-text')
@@ -168,7 +168,7 @@ def main(sample_rate, device_name):
                         'deadline too short' in e.message):
                     raise
 
-                # print('Resuming..')
+                print('Resuming...')
                 resume = True
 
 
