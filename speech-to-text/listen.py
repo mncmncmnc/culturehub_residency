@@ -23,6 +23,7 @@ from osc4py3.as_eventloop import (
 from osc4py3 import oscbuildparse
 
 from microphone_stream import ResumableMicrophoneStream
+from color_lexicon import word_color_associations
 
 
 def duration_to_secs(duration):
@@ -102,6 +103,7 @@ def listen_print_loop_helper(responses):
             num_chars_printed = len(transcript)
 
             osc_address_pattern = '/transcript/interim'
+            osc_word_colors_address_pattern = '/transcript/interim/word-colors'
         else:
             print(transcript + overwrite_chars)
 
@@ -114,9 +116,22 @@ def listen_print_loop_helper(responses):
             num_chars_printed = 0
 
             osc_address_pattern = '/transcript/final'
+            osc_word_colors_address_pattern = '/transcript/final/word-colors'
 
-        msg = oscbuildparse.OSCMessage(osc_address_pattern, ",s", [transcript.strip('\"').strip()])
+        transcript = transcript.strip('\"').strip()
+
+        word_colors = []
+        for word in transcript.split():
+            if word.lower() in word_color_associations:
+                word_colors.append(word_color_associations.get(word.lower()).get('color'))
+            else:
+                word_colors.append(None)
+
+        msg = oscbuildparse.OSCMessage(osc_address_pattern, ',s', [transcript])
         osc_send(msg, 'python-speech-to-text')
+        osc_process()
+        word_colors_msg = oscbuildparse.OSCMessage(osc_word_colors_address_pattern, ',' + 's' * len(word_colors), word_colors)
+        osc_send(word_colors_msg, 'python-speech-to-text')
         osc_process()
 
 
@@ -131,10 +146,12 @@ def main(sample_rate, device_name):
         sample_rate_hertz=sample_rate,
         language_code=language_code,
         max_alternatives=1,
-        enable_word_time_offsets=True)
+        enable_word_time_offsets=True
+    )
     streaming_config = types.StreamingRecognitionConfig(
         config=config,
-        interim_results=True)
+        interim_results=True
+    )
 
     mic_manager = ResumableMicrophoneStream(sample_rate, int(sample_rate / 10), device_name, max_replay_secs=5)
 
@@ -176,7 +193,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('-r', '--rate', default=16000, help='Sample rate.', type=int)
+    parser.add_argument('-r', '--rate', default=44100, help='Sample rate.', type=int)
     parser.add_argument('-d', '--device_name', default='Built-in Microphone', help='Name of microphone device.', type=str)
     args = parser.parse_args()
     main(args.rate, args.device_name)
