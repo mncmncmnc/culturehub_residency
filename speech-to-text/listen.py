@@ -23,7 +23,7 @@ from osc4py3.as_eventloop import (
 from osc4py3 import oscbuildparse
 
 from microphone_stream import ResumableMicrophoneStream
-from color_lexicon import word_color_associations
+from word_lexicons import word_color_associations
 
 
 def duration_to_secs(duration):
@@ -156,7 +156,7 @@ def main(sample_rate, device_name):
     mic_manager = ResumableMicrophoneStream(sample_rate, int(sample_rate / 10), device_name, max_replay_secs=5)
 
     osc_startup()
-    osc_udp_client('localhost', 2781, 'python-speech-to-text')
+    osc_udp_client('127.0.0.1', 2781, 'python-speech-to-text')
 
     msg = oscbuildparse.OSCMessage('/start', None, oscbuildparse.OSCbang())
     osc_send(msg, 'python-speech-to-text')
