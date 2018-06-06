@@ -19,6 +19,8 @@ echo 'eval "$(pyenv virtualenv-init -)"' | cat - ~/.bash_profile > temp && mv te
 
 echo 'eval "$(pyenv init -)"' | cat - ~/.bash_profile > temp && mv temp ~/.bash_profile
 
+echo 'export PATH="/usr/local/bin:$PATH"' | cat - ~/.bash_profile > temp && mv temp ~/.bash_profile
+
 source ~/.bash_profile
 ```
 

@@ -1789,7 +1789,7 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-41",
-					"items" : [ "Built-in Microphone", ",", "Scarlett 6i6 USB", ",", "Soundflower (2ch)", ",", "Soundflower (64ch)", ",", "Loopback Audio 2", ",", "Loopback Audio", ",", "Aggregate Device (1)", ",", "oren", ",", "Aggregate Device (2)" ],
+					"items" : [ "Built-in Microphone", ",", "Soundflower (2ch)", ",", "Soundflower (64ch)", ",", "Loopback Audio 2", ",", "Loopback Audio", ",", "Aggregate Device", ",", "oren" ],
 					"maxclass" : "umenu",
 					"numinlets" : 1,
 					"numoutlets" : 3,
@@ -1892,7 +1892,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 111.5, 118.0, 46.0, 22.0 ],
+					"patching_rect" : [ 166.0, 113.0, 46.0, 22.0 ],
 					"style" : "",
 					"text" : "s draw"
 				}
