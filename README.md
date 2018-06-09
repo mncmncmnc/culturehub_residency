@@ -1,4 +1,20 @@
-# Terminal Setup Instructions for OS X
+# Documentation for June 2018 CultureHub Residenency
+
+## Contents
+
+This repo contains code for sending speech-to-text transcriptions into Max/MSP/Jitter patches that then display and interpret that text.
+
+The `speech-to-text` directory contains a Python script called `listen.py` that uses Google's Speech-To-Text API to continuously transcribe live audio from a designated microphone and send the results out over OSC. By default, the script uses the built-in microphone, but can be passed an optional `-d` argument to specify an alternate device name, e.g.
+
+```
+python speech-to-text/listen.py - d "Scarlett 6i6 USB"
+```
+
+There are two Max patches, `abstract.maxpat` and `flash.maxpat`, that demonstrate different ways of using the speech-to-text transcription in a live performance context. Both of these Max patches will start the Python script automatically as soon as they open, using the `shell` Max external to run an Applescript script called `listen.scpt` that takes care of activating a virtualenv and starting the Python script.
+
+`flash.maxpat` displays the transcribed text on CultureHub's 3840x720 three-projector screen, while `abstract.maxpat` uses the amount of text read so far to control the behavior of some 3D objects.
+
+## Setup Instructions for OS X
 
 Run the following commands from the root directory of this repo.
 
@@ -53,6 +69,4 @@ echo 'export GOOGLE_APPLICATION_CREDENTIALS=/path/to/my-credentials-805re3qcnbcd
 source ~/.bash_profile
 ```
 
-You should now be able to run the speech transcription Python script. You can test it out by running the following command from the `speech-to-text` directory.
-
-```python listen.py 0```
+You should now be able to run the speech transcription Python script.
