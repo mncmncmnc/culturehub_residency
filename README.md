@@ -10,7 +10,7 @@ The `speech-to-text` directory contains a Python script called `listen.py` that 
 python speech-to-text/listen.py - d "Scarlett 6i6 USB"
 ```
 
-There are two Max patches, `abstract.maxpat` and `flash.maxpat`, that demonstrate different ways of using the speech-to-text transcription in a live performance context. Both of these Max patches will start the Python script automatically as soon as they open, using the `shell` Max external to run an Applescript script called `listen.scpt` that takes care of activating a virtualenv and starting the Python script.
+There are two Max patches, `flash.maxpat` and `abstract.maxpat`, that demonstrate different ways of using the speech-to-text transcription in a live performance context. Both of these Max patches will start the Python script automatically as soon as they open, using the `shell` Max external to run an Applescript script called `listen.scpt` that takes care of activating a virtualenv and starting the Python script.
 
 `flash.maxpat` displays the transcribed text on CultureHub's 3840x720 three-projector screen, while `abstract.maxpat` uses the amount of text read so far to control the behavior of some 3D objects.
 
