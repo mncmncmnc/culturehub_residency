@@ -5,11 +5,11 @@
 			"major" : 7,
 			"minor" : 3,
 			"revision" : 5,
-			"architecture" : "x64",
+			"architecture" : "x86",
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 38.0, 79.0, 2004.0, 1322.0 ],
+		"rect" : [ 34.0, 80.0, 1212.0, 681.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -91,7 +91,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
-					"patching_rect" : [ 893.5, 443.400452, 29.5, 22.0 ],
+					"patching_rect" : [ 915.5, 443.400452, 29.5, 22.0 ],
 					"style" : "",
 					"text" : "- 1"
 				}
@@ -156,7 +156,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 706.5, 8.0, 107.0, 22.0 ],
-					"presentation_rect" : [ 470.5, 153.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "r interim-transcript"
 				}
@@ -170,7 +169,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 820.0, 8.0, 93.0, 22.0 ],
-					"presentation_rect" : [ 584.0, 153.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "r final-transcript"
 				}
@@ -183,7 +181,7 @@
 					"numinlets" : 0,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 704.5, 309.400452, 107.0, 22.0 ],
+					"patching_rect" : [ 706.5, 309.400452, 107.0, 22.0 ],
 					"style" : "",
 					"text" : "r interim-transcript"
 				}
@@ -258,7 +256,7 @@
 					"numinlets" : 0,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1193.5, 469.400452, 51.0, 22.0 ],
+					"patching_rect" : [ 1215.5, 469.400452, 51.0, 22.0 ],
 					"style" : "",
 					"text" : "r to-text"
 				}
@@ -296,7 +294,7 @@
 					"numinlets" : 0,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 792.0, 353.400452, 67.0, 22.0 ],
+					"patching_rect" : [ 814.0, 353.400452, 67.0, 22.0 ],
 					"style" : "",
 					"text" : "r audio-init"
 				}
@@ -315,7 +313,7 @@
 							"major" : 7,
 							"minor" : 3,
 							"revision" : 5,
-							"architecture" : "x64",
+							"architecture" : "x86",
 							"modernui" : 1
 						}
 ,
@@ -654,7 +652,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 704.5, 353.400452, 84.0, 22.0 ],
+					"patching_rect" : [ 706.5, 353.400452, 84.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -689,7 +687,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 889.5, 171.0, 45.0, 22.0 ],
-					"presentation_rect" : [ 639.0, 283.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "r reset"
 				}
@@ -702,7 +699,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "text" ],
-					"patching_rect" : [ 1140.5, 469.400452, 37.0, 22.0 ],
+					"patching_rect" : [ 1162.5, 469.400452, 37.0, 22.0 ],
 					"style" : "",
 					"text" : "t text"
 				}
@@ -715,7 +712,7 @@
 					"numinlets" : 0,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1140.5, 441.400452, 45.0, 22.0 ],
+					"patching_rect" : [ 1162.5, 441.400452, 45.0, 22.0 ],
 					"style" : "",
 					"text" : "r reset"
 				}
@@ -751,7 +748,7 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-92",
-					"items" : [ "Display Audio", ",", "Scarlett 6i6 USB", ",", "Soundflower (2ch)", ",", "Soundflower (64ch)", ",", "Loopback Audio 2", ",", "Loopback Audio" ],
+					"items" : [ "Built-in Microphone", ",", "Soundflower (2ch)", ",", "Soundflower (64ch)", ",", "Loopback Audio 2", ",", "Loopback Audio", ",", "Aggregate Device", ",", "oren" ],
 					"maxclass" : "umenu",
 					"numinlets" : 1,
 					"numoutlets" : 3,
@@ -775,7 +772,7 @@
 							"major" : 7,
 							"minor" : 3,
 							"revision" : 5,
-							"architecture" : "x64",
+							"architecture" : "x86",
 							"modernui" : 1
 						}
 ,
@@ -1094,7 +1091,7 @@
 , 							{
 								"box" : 								{
 									"id" : "obj-41",
-									"items" : [ "Display Audio", ",", "Scarlett 6i6 USB", ",", "Soundflower (2ch)", ",", "Soundflower (64ch)", ",", "Loopback Audio 2", ",", "Loopback Audio" ],
+									"items" : [ "Built-in Microphone", ",", "Soundflower (2ch)", ",", "Soundflower (64ch)", ",", "Loopback Audio 2", ",", "Loopback Audio", ",", "Aggregate Device", ",", "oren" ],
 									"maxclass" : "umenu",
 									"numinlets" : 1,
 									"numoutlets" : 3,
@@ -1144,7 +1141,7 @@
 									"saved_object_attributes" : 									{
 										"shell" : "(default)",
 										"stderr" : 1,
-										"wd" : "~/mnc_culturehub_residency"
+										"wd" : "~/culturehub_residency"
 									}
 ,
 									"style" : "",
@@ -1679,7 +1676,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 704.5, 443.400452, 59.0, 22.0 ],
+					"patching_rect" : [ 706.5, 441.400452, 59.0, 22.0 ],
 					"style" : "",
 					"text" : "tosymbol"
 				}
@@ -1690,11 +1687,11 @@
 					"id" : "obj-84",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 706.5, 469.400452, 77.0, 22.0 ],
+					"numoutlets" : 2,
+					"outlettype" : [ "jit_matrix", "" ],
+					"patching_rect" : [ 706.5, 469.400452, 101.0, 22.0 ],
 					"style" : "",
-					"text" : "prepend text"
+					"text" : "jit.str.fromsymbol"
 				}
 
 			}
@@ -1822,7 +1819,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 792.0, 389.400452, 38.0, 22.0 ],
+					"patching_rect" : [ 814.0, 389.400452, 38.0, 22.0 ],
 					"style" : "",
 					"text" : "-0.96"
 				}
@@ -1835,7 +1832,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 851.0, 389.400452, 34.0, 22.0 ],
+					"patching_rect" : [ 873.0, 389.400452, 34.0, 22.0 ],
 					"style" : "",
 					"text" : "0.84"
 				}
@@ -1884,7 +1881,7 @@
 							"major" : 7,
 							"minor" : 3,
 							"revision" : 5,
-							"architecture" : "x64",
+							"architecture" : "x86",
 							"modernui" : 1
 						}
 ,
@@ -2099,7 +2096,7 @@
 							"major" : 7,
 							"minor" : 3,
 							"revision" : 5,
-							"architecture" : "x64",
+							"architecture" : "x86",
 							"modernui" : 1
 						}
 ,
@@ -2713,7 +2710,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 893.5, 469.400452, 85.0, 22.0 ],
+					"patching_rect" : [ 915.5, 469.400452, 85.0, 22.0 ],
 					"style" : "",
 					"text" : "line_length $1"
 				}
@@ -2754,7 +2751,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 792.0, 413.400452, 50.0, 22.0 ],
+					"patching_rect" : [ 814.0, 413.400452, 50.0, 22.0 ],
 					"style" : ""
 				}
 
@@ -2768,7 +2765,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 851.0, 413.400452, 50.0, 22.0 ],
+					"patching_rect" : [ 873.0, 413.400452, 50.0, 22.0 ],
 					"style" : ""
 				}
 
@@ -2780,7 +2777,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 792.0, 441.400452, 57.0, 22.0 ],
+					"patching_rect" : [ 814.0, 441.400452, 57.0, 22.0 ],
 					"style" : "",
 					"text" : "pak 0. 0."
 				}
@@ -2793,7 +2790,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 792.0, 469.400452, 95.0, 22.0 ],
+					"patching_rect" : [ 814.0, 469.400452, 95.0, 22.0 ],
 					"style" : "",
 					"text" : "position $1 $2 0"
 				}
@@ -3107,7 +3104,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 980.0, 469.400452, 150.0, 22.0 ],
+					"patching_rect" : [ 1002.0, 469.400452, 150.0, 22.0 ],
 					"style" : ""
 				}
 
